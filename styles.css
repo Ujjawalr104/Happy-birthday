@@ -185,8 +185,9 @@
   height: 100%;
   z-index: -1;
   background: radial-gradient(circle at top left, #ffb6c1, #ff69b4, #ff1493);
-  filter: brightness(1.1) blur(0.5px);
+  /* filter: brightness(1.1); */
 }
+
 
 /* Add soft glow around images */
 .image-section img {
@@ -219,7 +220,7 @@ html {
 
 /* Subtle sparkle effect */
 body::after {
-  content: '';
+  content: none;
   position: fixed;
   top: 0;
   left: 0;
