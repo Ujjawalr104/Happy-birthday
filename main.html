@@ -7,44 +7,51 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <h2 class="brand">For My Love</h2>
-      <nav class="mini-nav">Scroll down for memories</nav>
-    </div>
-  </header>
-
+  <body>
+    <!-- Floating Hearts Background -->
+    <canvas id="heartsCanvas"></canvas>
+  
+    <header class="header">
+      <div class="header-inner">
+        <h2 class="brand">For My Love</h2>
+        <nav class="mini-nav">Scroll down for memories</nav>
+      </div>
+    </header>
+  
+    <!-- rest of your HTML remains same -->
+  
   <main id="mainContent">
 
     <!-- SECTION 1 (left image, right text) -->
-    <section class="image-section alt">
+    <section class="image-section alt" data-song="assets/Isharon Isharon Men Dil Lenewale.mp3">
       <div class="img-col">
         <!-- Replace with your first image -->
         <img src="assets/img2.jpeg" alt="Our memory 1" />
+       
       </div>
 
       <div class="text-col">
-        <h3>Section 1</h3>
+        
         <p class="sweet-line">My love, you are truly one of a kind — a beautiful soul who brings light, laughter, and endless warmth into my life. Every moment spent with you feels like a blessing, and your presence fills my world with peace and joy. Your kindness, patience, and strength inspire me every single day, and I’m constantly amazed by the way you handle everything with such grace and love. You make even ordinary days feel special, and your smile has the power to brighten even my darkest moments. I’m endlessly grateful to have you by my side — you’re my greatest gift and my forever reason to smile. ❤️
         </p>
       </div>
     </section>
 
     <!-- SECTION 2 (right image, left text) -->
-    <section class="image-section">
+    <section class="image-section" data-song="assets/Ek Tera Saath Humko.mp3">
       <div class="img-col right">
         <img src="assets/img1.jpeg" alt="Our memory 2" />
       </div>
 
       <div class="text-col">
-        <h3>Section 2</h3>
+        
         <p class="sweet-line">When I first saw you, everything around me seemed to pause for a moment — as if time itself wanted me to take in your beauty. My heart skipped a beat, and I couldn’t help but get lost in your eyes; they had a warmth that instantly pulled me in. There was something magical about that moment — your smile, your voice, your presence — it all felt so familiar, like I’d known you forever. I remember feeling a mix of excitement and calm, as if my heart whispered, *“This is the one.”* From that very first glance, I knew my life was about to change in the most beautiful way. ❤️
         </p>
       </div>
     </section>
 
     <!-- SECTION 3 (right image, left text) -->
-    <section class="image-section">
+    <section class="image-section" data-song="assets/Abhi Saans Lene Ki Fursat Nahin Jeet 128 Kbps.mp3">
       <div class="img-col">
         <img src="assets/img3.jpeg" alt="Our memory 2" />
       </div>
@@ -57,7 +64,7 @@
     </section>
     
     <!-- SECTION 4 (right image, left text) -->
-    <section class="image-section">
+    <section class="image-section" data-song="assets/Haule Haule Chalo Mere Sajna (From Sawan Ki Ghata).mp3">
       <div class="img-col right">
         <img src="assets/img4.jpeg" alt="Our memory 2" />
       </div>
@@ -69,7 +76,7 @@
     </section>
 
     <!-- SECTION 5 (right image, left text) -->
-    <section class="image-section">
+    <section class="image-section" data-song="assets/Lag Ja Gale Se Phir.mp3" >
       <div class="img-col">
         <img src="assets/img5.jpeg" alt="Our memory 2" />
       </div>
@@ -81,7 +88,7 @@
     </section>
 
     <!-- SECTION 6(right image, left text) -->
-    <section class="image-section">
+    <section class="image-section" data-song="assets/Saathiya Nahin Jana Aya Sawan Jhoom Ke 320 Kbps.mp3">
       <div class="img-col right">
         <img src="assets/img6.jpeg" alt="Our memory 2" />
       </div>
@@ -93,7 +100,7 @@
     </section>
 
     <!-- SECTION 7 (right image, left text) -->
-    <section class="image-section">
+    <section class="image-section" data-song="assets/Taarif Karoon Kya Uski Kashmir Ki Kali 320 Kbps.mp3">
       <div class="img-col">
         <img src="assets/img7.jpeg" alt="Our memory 2" />
       </div>
@@ -103,6 +110,106 @@
         <p class="sweet-line">When I think about the future, it’s your face I see beside me — smiling, growing, and living every dream together. I want to travel the world with you, share morning coffees, dance in the rain, and create memories that never fade. I want to wake up next to you every day knowing I’m exactly where I’m meant to be. You are my dream come true — not the kind that fades when I open my eyes, but the one that becomes more real with every heartbeat. With you, forever doesn’t feel like a long time — it feels like home. ❤️</p>
       </div>
     </section>
+
+    <!-- Hidden Audio Player -->
+    <audio id="bg-music" autoplay loop hidden></audio>
+  
+    <script>
+      const audio = document.getElementById("bg-music");
+      const sections = document.querySelectorAll("section");
+  
+      let currentSong = "";
+  
+      const options = {
+        threshold: 0.6
+      };
+  
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const song = entry.target.getAttribute("data-song");
+            if (song && song !== currentSong) {
+              fadeToNewSong(song);
+              currentSong = song;
+            }
+          }
+        });
+      }, options);
+  
+      sections.forEach(section => observer.observe(section));
+  
+      function fadeToNewSong(songPath) {
+        // Fade out
+        let fadeOut = setInterval(() => {
+          if (audio.volume > 0.05) {
+            audio.volume -= 0.05;
+          } else {
+            clearInterval(fadeOut);
+            audio.src = songPath;
+            audio.play().then(() => {
+              // Fade in
+              let fadeIn = setInterval(() => {
+                if (audio.volume < 1) {
+                  audio.volume += 0.00;
+                } else {
+                  clearInterval(fadeIn);
+                }
+              },);
+            });
+          }
+        }, );
+      }
+  
+      // Initialize volume
+      audio.volume = 1;
+
+      // 💖 Floating Hearts Animation
+const canvas = document.getElementById("heartsCanvas");
+const ctx = canvas.getContext("2d");
+let hearts = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function createHeart() {
+  return {
+    x: Math.random() * canvas.width,
+    y: canvas.height + 10,
+    size: Math.random() * 20 + 10,
+    speed: Math.random() * 1 + 0.5,
+    alpha: Math.random() * 0.8 + 0.2,
+    color: `rgba(255, ${Math.floor(Math.random() * 100 + 50)}, ${Math.floor(Math.random() * 150 + 100)}, 1)`
+  };
+}
+
+function drawHeart(x, y, size, color) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x - size / 2, y - size / 2, x - size, y + size / 3, x, y + size);
+  ctx.bezierCurveTo(x + size, y + size / 3, x + size / 2, y - size / 2, x, y);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function animateHearts() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hearts.forEach((heart, i) => {
+    heart.y -= heart.speed;
+    heart.x += Math.sin(heart.y / 30) * 0.5;
+    heart.alpha -= 0.002;
+    if (heart.alpha <= 0) hearts.splice(i, 1);
+    drawHeart(heart.x, heart.y, heart.size, heart.color);
+  });
+  if (Math.random() < 0.05) hearts.push(createHeart());
+  requestAnimationFrame(animateHearts);
+}
+animateHearts();
+
+    </script>
     
 
 
